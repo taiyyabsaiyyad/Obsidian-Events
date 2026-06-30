@@ -21,14 +21,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            background: var(--bg);
+            background-image: url('obsidian-deep-bg.png');
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
             color: var(--ink);
             font-family: 'Inter', sans-serif;
             font-size: 15px;
             line-height: 1.5;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            cursor: default;
+            cursor: none;
         }
 
         /* ─ SCENE ─ */
@@ -45,10 +48,10 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.6) 60%, rgba(5,5,5,0.95) 100%);
+            background: linear-gradient(to bottom, rgba(5,5,5,0.1) 0%, rgba(5,5,5,0.45) 55%, rgba(5,5,5,0.8) 100%);
             pointer-events: none;
         }
-        canvas#particles { z-index: 1; }
+        canvas#particles { position: fixed; inset: 0; z-index: 6; pointer-events: none; }
         .halo {
             position: absolute;
             border-radius: 50%;
@@ -671,6 +674,40 @@
             .cd { min-width: 58px; padding: 12px 8px; }
             .cd .num { font-size: 1.6rem; }
         }
+
+        /* ─ CURSOR ─ */
+        .cursor, .cursor-glow {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 50%;
+            transform: translate3d(0,0,0) translate(-50%, -50%);
+            will-change: transform;
+        }
+        .cursor {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            box-shadow: 0 0 12px #fff, 0 0 22px rgba(0,194,255,0.9), 0 0 40px rgba(0,194,255,0.6);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+        .cursor.active {
+            width: 14px;
+            height: 14px;
+            background: #00c2ff;
+            box-shadow: 0 0 24px #00c2ff, 0 0 44px rgba(0,194,255,0.9);
+        }
+        .cursor-glow {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(0,194,255,0.25) 0%, transparent 70%);
+            filter: blur(4px);
+        }
+        @media (max-width: 768px) {
+            .cursor, .cursor-glow { display: none; }
+            body { cursor: auto; }
+        }
     </style>
 </head>
 <body>
@@ -830,8 +867,8 @@
         function frame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
-                p.y -= p.v;
-                if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+                p.y += p.v;
+                if (p.y > canvas.height + 10) { p.y = -10; p.x = Math.random() * canvas.width; }
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(${p.rgb},${p.o})`;
@@ -894,6 +931,26 @@
         }
         tick();
         setInterval(tick, 1000);
+
+        // Glowing star cursor
+        const cursor = document.createElement('div');
+        cursor.className = 'cursor';
+        document.body.appendChild(cursor);
+        const cursorGlow = document.createElement('div');
+        cursorGlow.className = 'cursor-glow';
+        document.body.appendChild(cursorGlow);
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+            cursorGlow.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+        });
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+        // Hide on touch devices
+        window.addEventListener('touchstart', () => {
+            cursor.style.display = 'none';
+            cursorGlow.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        }, { once: true });
     })();
 </script>
 </body>
