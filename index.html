@@ -38,18 +38,16 @@
         .scene {
             position: relative;
             min-height: 100vh;
-            background-image: url('hero-bg.png');
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
             overflow: hidden;
+            pointer-events: none;
         }
         .scene::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(5,5,5,0.1) 0%, rgba(5,5,5,0.45) 55%, rgba(5,5,5,0.8) 100%);
+            background: linear-gradient(to bottom, rgba(5,5,5,0.15) 0%, rgba(5,5,5,0.55) 55%, rgba(5,5,5,0.85) 100%);
             pointer-events: none;
+            z-index: 2;
         }
         canvas#particles { position: fixed; inset: 0; z-index: 6; pointer-events: none; }
         .halo {
