@@ -21,7 +21,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            background: var(--bg);
+            background: transparent;
             color: var(--ink);
             font-family: 'Inter', sans-serif;
             font-size: 15px;
@@ -38,11 +38,10 @@
             z-index: 0;
             overflow: hidden;
             pointer-events: none;
-            background:
-                radial-gradient(ellipse at 50% 30%, rgba(0, 194, 255, 0.07) 0%, transparent 55%),
-                radial-gradient(ellipse at 50% 70%, rgba(160, 120, 255, 0.06) 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 20%, rgba(200, 164, 74, 0.04) 0%, transparent 50%),
-                var(--bg);
+            background-image: url('obsidian-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         canvas#particles { z-index: 1; }
         .halo {
@@ -63,7 +62,8 @@
         .vignette {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.85) 100%);
+            background:
+                radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.8) 100%);
             pointer-events: none;
             z-index: 4;
         }
@@ -670,7 +670,7 @@
 
 <script>
     (function() {
-        // Canvas particles
+        // Canvas particles - space galaxy / starfield
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -683,30 +683,66 @@
             init() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.r = Math.random() * 1.4 + 0.4;
-                this.v = Math.random() * 0.25 + 0.08;
-                this.o = Math.random() * 0.4 + 0.15;
+                this.z = Math.random() * 2 + 0.5; // depth factor
+                this.r = Math.random() * 1.6 + 0.3;
+                this.baseY = this.y;
+                this.v = (Math.random() * 0.2 + 0.05) * this.z;
+                this.o = Math.random() * 0.5 + 0.1;
                 const c = Math.random();
-                this.rgb = c < 0.25 ? '0,194,255' : c < 0.55 ? '200,164,74' : '255,255,255';
+                // Mix of cyan, purple, gold, white
+                if (c < 0.2) this.rgb = '0,194,255';
+                else if (c < 0.35) this.rgb = '160,120,255';
+                else if (c < 0.45) this.rgb = '200,164,74';
+                else this.rgb = '255,255,255';
+                this.twinkle = Math.random() * Math.PI * 2;
+                this.twinkleSpeed = 0.02 + Math.random() * 0.03;
             }
         }
-        const N = Math.min(140, Math.floor(window.innerWidth * 0.08));
+        const N = Math.min(220, Math.floor(window.innerWidth * 0.12));
         for (let i = 0; i < N; i++) particles.push(new P());
+
+        // Scroll state
+        let scrollY = 0;
+        window.addEventListener('scroll', () => { scrollY = window.pageYOffset; });
+
         function frame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Scroll parallax factor
+            const parallax = scrollY * 0.15;
+
             particles.forEach(p => {
                 p.y -= p.v;
-                if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+                p.twinkle += p.twinkleSpeed;
+                const alpha = p.o + Math.sin(p.twinkle) * 0.15;
+                if (p.y < -10) {
+                    p.y = canvas.height + 10;
+                    p.x = Math.random() * canvas.width;
+                }
+                // Parallax offset by depth
+                const px = p.x;
+                const py = p.y - parallax * p.z;
+
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${p.rgb},${p.o})`;
+                ctx.arc(px, py, p.r * p.z, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${p.rgb}, ${Math.max(0, alpha)})`;
                 ctx.fill();
+
+                // Soft glow on larger particles
+                if (p.r > 1 && p.z > 1.2) {
+                    ctx.beginPath();
+                    ctx.arc(px, py, p.r * p.z * 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${p.rgb}, ${Math.max(0, alpha * 0.12)})`;
+                    ctx.fill();
+                }
             });
+
             requestAnimationFrame(frame);
         }
         frame();
 
-        // Parallax halos
+        // Parallax halos + background shift on scroll
+        const scene = document.querySelector('.scene');
         const halos = document.querySelectorAll('.halo');
         let mx = 0, my = 0, cx = 0, cy = 0;
         document.addEventListener('mousemove', e => {
@@ -716,10 +752,17 @@
         function loop() {
             cx += (mx - cx) * 0.05;
             cy += (my - cy) * 0.05;
+            // Mouse parallax
             halos.forEach((h, i) => {
-                const s = (i + 1) * 0.6;
+                const s = (i + 1) * 0.5;
                 h.style.transform = `translate3d(${cx * s}vw, ${cy * s}vh, 0)`;
             });
+            // Scroll parallax for scene
+            if (scene) {
+                const sy = scrollY * 0.25;
+                scene.style.backgroundPositionY = `calc(50% + ${sy}px)`;
+                scene.style.transform = `translate3d(0, ${-sy * 0.3}px, 0)`;
+            }
             requestAnimationFrame(loop);
         }
         loop();
