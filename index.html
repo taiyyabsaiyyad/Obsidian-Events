@@ -39,8 +39,9 @@
             overflow: hidden;
             pointer-events: none;
             background:
-                radial-gradient(ellipse at 50% 30%, rgba(0, 194, 255, 0.06) 0%, transparent 55%),
-                radial-gradient(ellipse at 50% 70%, rgba(200, 164, 74, 0.04) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 30%, rgba(0, 194, 255, 0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 70%, rgba(160, 120, 255, 0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 20%, rgba(200, 164, 74, 0.04) 0%, transparent 50%),
                 var(--bg);
         }
         canvas#particles { z-index: 1; }
@@ -53,7 +54,7 @@
             animation: drift 25s infinite alternate ease-in-out;
         }
         .halo--1 { width: 600px; height: 600px; top: -10%; left: 20%; background: rgba(0, 194, 255, 0.12); animation-duration: 28s; }
-        .halo--2 { width: 500px; height: 500px; bottom: 10%; right: 10%; background: rgba(200, 164, 74, 0.1); animation-duration: 22s; animation-delay: -8s; }
+        .halo--2 { width: 500px; height: 500px; bottom: 10%; right: 10%; background: rgba(160, 120, 255, 0.1); animation-duration: 22s; animation-delay: -8s; }
         @keyframes drift {
             0%   { transform: translate(0,0) scale(1); }
             50%  { transform: translate(3vw, 2vh) scale(1.08); }
@@ -142,22 +143,22 @@
         }
         .logo {
             display: block;
-            width: 240px;
+            width: 260px;
             height: auto;
             position: relative;
             z-index: 2;
             animation: logo-fade 5s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(0, 194, 255, 0.15));
+            filter: drop-shadow(0 0 28px rgba(0, 194, 255, 0.18)) drop-shadow(0 0 60px rgba(120, 100, 255, 0.12));
         }
         @keyframes logo-fade {
-            0%, 100% { opacity: 0.85; }
+            0%, 100% { opacity: 0.88; }
             50% { opacity: 1; }
         }
         .logo-glow {
             position: absolute;
             inset: -20%;
             z-index: 1;
-            background: radial-gradient(circle at center, rgba(0,194,255,0.18), rgba(200,164,74,0.1), transparent 70%);
+            background: radial-gradient(circle at center, rgba(0,194,255,0.22), rgba(160,120,255,0.16), rgba(200,164,74,0.08), transparent 70%);
             filter: blur(30px);
             animation: logo-pulse 3s infinite alternate ease-in-out;
             pointer-events: none;
