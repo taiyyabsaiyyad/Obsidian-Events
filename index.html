@@ -297,36 +297,41 @@
         /* ─ COUNTDOWN ─ */
         .countdown {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             justify-content: center;
             margin: 32px 0 44px;
             flex-wrap: wrap;
         }
         .cd {
-            min-width: 76px;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.06);
-            padding: 16px 10px;
-            border-radius: 12px;
+            min-width: 86px;
+            background: rgba(20, 20, 25, 0.75);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 20px 14px;
+            border-radius: 16px;
             text-align: center;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
         }
         .cd .num {
             display: block;
             font-family: 'Syne', sans-serif;
             font-weight: 700;
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             color: #fff;
             line-height: 1;
             letter-spacing: 0.02em;
+            background: linear-gradient(180deg, #fff 0%, #b8c4d0 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .cd .lbl {
             display: block;
-            font-size: 0.6rem;
+            font-size: 0.62rem;
             text-transform: uppercase;
             letter-spacing: 0.28em;
-            color: var(--muted);
-            margin-top: 8px;
+            color: #8a8a96;
+            margin-top: 10px;
         }
 
         /* ─ CTRAS ─ */
@@ -708,11 +713,6 @@
 
     <section class="hero">
         <div class="hero-inner">
-            <div class="logo-wrap reveal">
-                <div class="logo-ring">
-                    <img class="logo" src="obsidian-events-logo.png" alt="Obsidian Events">
-                </div>
-            </div>
             <h1 class="reveal">
                 Extraordinary <span class="blue">Events.</span><br>
                 Immortal <span class="blue">Impressions.</span>
@@ -720,6 +720,24 @@
             <p class="lead reveal">
                 Crafting unforgettable experiences with creativity, precision and passion.
             </p>
+            <div class="countdown reveal" id="countdown">
+                <div class="cd">
+                    <span class="num" id="d">30</span>
+                    <span class="lbl">Days</span>
+                </div>
+                <div class="cd">
+                    <span class="num" id="h">00</span>
+                    <span class="lbl">Hours</span>
+                </div>
+                <div class="cd">
+                    <span class="num" id="m">00</span>
+                    <span class="lbl">Mins</span>
+                </div>
+                <div class="cd">
+                    <span class="num" id="s">00</span>
+                    <span class="lbl">Secs</span>
+                </div>
+            </div>
             <div class="actions reveal">
                 <a href="#work" class="btn btn--solid">Our Services →</a>
                 <a href="#work" class="btn btn--ghost">View Our Work</a>
@@ -867,8 +885,8 @@
         }, { threshold: 0.1 });
         grids.forEach(g => sio.observe(g));
 
-        // Countdown (launch date)
-        const DEADLINE = new Date('2027-01-01T00:00:00').getTime();
+        // Countdown: 30 days from page load
+        const DEADLINE = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).getTime();
         const $d = document.getElementById('d');
         const $h = document.getElementById('h');
         const $m = document.getElementById('m');
