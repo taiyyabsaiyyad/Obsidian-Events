@@ -15,7 +15,7 @@
             --muted: #7a7a88;
             --muted-2: #40404a;
             --silver: #c8cdd5;
-            --blue: #00c2ff;
+            --blue: #0b4fd4;
             --gold: #c8a44a;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -321,26 +321,26 @@
             cursor: pointer;
         }
         .btn--solid {
-            background: linear-gradient(135deg, #00c2ff, #0090cc);
+            background: linear-gradient(135deg, #0b4fd4, #003db5);
             color: #fff;
             border-color: transparent;
-            box-shadow: 0 8px 30px rgba(0,194,255,0.35);
+            box-shadow: 0 8px 30px rgba(11,79,212,0.35);
         }
         .btn--solid:hover {
             transform: translateY(-2px);
-            box-shadow: 0 16px 40px rgba(0,194,255,0.5);
-            background: linear-gradient(135deg, #33cdff, #00a8e6);
+            box-shadow: 0 16px 40px rgba(11,79,212,0.5);
+            background: linear-gradient(135deg, #1e63f0, #0b4fd4);
         }
         .btn--ghost {
             background: transparent;
-            border-color: rgba(255,255,255,0.35);
+            border-color: rgba(255,255,255,0.2);
             color: #fff;
         }
         .btn--ghost:hover {
             border-color: #fff;
             background: rgba(255,255,255,0.06);
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px rgba(11,79,212,0.45);
         }
 
         /* ─ DIVIDER ─ */
@@ -498,7 +498,7 @@
         .contact-card:hover {
             transform: translateY(-4px);
             border-color: transparent;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,194,255,0.12);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(11,79,212,0.18);
         }
         .contact-card:hover::before { opacity: 1; }
         .contact-label {
@@ -549,14 +549,14 @@
         }
         .query-inner:hover {
             transform: translateY(-6px);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 50px rgba(0,194,255,0.18);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 50px rgba(11,79,212,0.28);
         }
         .query-inner::before {
             content: '';
             position: absolute;
             inset: -1px;
             border-radius: inherit;
-            background: conic-gradient(from 0deg at 50% 50%, transparent, rgba(0,194,255,0.2), rgba(200,164,74,0.18), transparent);
+            background: conic-gradient(from 0deg at 50% 50%, transparent, rgba(11,79,212,0.22), rgba(200,164,74,0.18), transparent);
             opacity: 0.7;
             z-index: 0;
             animation: query-spin 8s linear infinite;
